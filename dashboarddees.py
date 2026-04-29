@@ -1,6 +1,8 @@
 # Carrega a oferta das disciplinas oferecidas pelo DEES entre 2012/2 a 2025/1.
 # Streamlit version of dashlit.py
 
+from pathlib import Path
+
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -12,7 +14,9 @@ def load_data():
     """Carrega e processa os dados"""
     # passo 1 - importar dados
     # encargos = pd.read_excel('data/cursosConsolidados_20122_20251.xlsx')
-    encargos = pd.read_csv('data/cursosConsolidados_20122_20251.csv', sep=';', encoding='cp1252')
+    # encargos = pd.read_csv('data/cursosConsolidados_20122_20251.csv', sep=';', encoding='cp1252')
+    data_file = Path(__file__).parent/"data"/"cursosConsolidados_20122_20251.csv"
+    encargos = pd.read_csv(data_file, sep=';', encoding='cp1252')
     
     # inicio das "estatísticas"
     semestres = sorted(encargos['semestre'].dropna().unique().tolist())

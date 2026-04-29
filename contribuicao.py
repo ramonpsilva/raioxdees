@@ -15,8 +15,8 @@ def load_data(file_path: str) -> pd.DataFrame:
     return df
 
 
-data_file = Path(__file__).with_name("data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx")
-
+# data_file = Path(__file__).with_name("data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx")
+data_file = Path(__file__).parent/"data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx"
 if not data_file.exists():
     st.error(
         "Arquivo data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx "

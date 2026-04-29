@@ -14,8 +14,7 @@ def load_data(file_path: str) -> pd.DataFrame:
     df["semestre"] = df["semestre"].astype(str)
     return df
 
-
-data_file = Path(__file__).with_name("data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx")
+data_file = Path(__file__).parent/"data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx"
 
 if not data_file.exists():
     st.error(
