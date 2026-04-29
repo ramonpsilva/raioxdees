@@ -128,13 +128,29 @@ tab1, tab2 = st.tabs(["📈 CHSM", "📊 Ocupação"])
 with tab1:
     st.header("Histórico da CHSM")
     
-    # Seletor de professor
-    professor_selected = st.selectbox(
-        "Selecione um professor:",
-        professores,
-        index=0,
-        key="professor_selector"
-    )
+    # Filtro de vínculo e seletor de professor lado a lado
+    vinculos_disponiveis = sorted(encargos['vinculo'].dropna().unique().tolist())
+    col_vinculo, col_professor = st.columns(2)
+
+    with col_vinculo:
+        vinculos_selected = st.multiselect(
+            "Filtrar por vínculo:",
+            vinculos_disponiveis,
+            default=["PRF"] if "PRF" in vinculos_disponiveis else vinculos_disponiveis,
+            key="vinculo_filter"
+        )
+
+    professores_filtrados = sorted(
+        encargos.loc[encargos['vinculo'].isin(vinculos_selected), 'professor'].dropna().unique().tolist()
+    ) if vinculos_selected else professores
+
+    with col_professor:
+        professor_selected = st.selectbox(
+            "Selecione um professor:",
+            professores_filtrados,
+            index=0,
+            key="professor_selector"
+        )
     
     # Gráfico CHSM
     if professor_selected:

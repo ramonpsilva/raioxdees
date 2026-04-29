@@ -40,7 +40,7 @@ def build_svg_plot(data: pd.DataFrame, departments: list[str], year_ticks: list[
 	return svg_buffer.getvalue()
 
 
-data_file = Path(__file__).with_name("evolucao_docente.xlsx")
+data_file = Path(__file__).with_name("data/evolucao_docente.xlsx")
 
 if not data_file.exists():
 	st.error("Arquivo evolucao_docente.xlsx não encontrado na pasta do projeto.")

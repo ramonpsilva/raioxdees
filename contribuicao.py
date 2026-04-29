@@ -15,11 +15,11 @@ def load_data(file_path: str) -> pd.DataFrame:
     return df
 
 
-data_file = Path(__file__).with_name("percentualEncargosCursosDepartamentoResumido_concatenados.xlsx")
+data_file = Path(__file__).with_name("data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx")
 
 if not data_file.exists():
     st.error(
-        "Arquivo percentualEncargosCursosDepartamentoResumido_concatenados.xlsx "
+        "Arquivo data/percentualEncargosCursosDepartamentoResumido_concatenados.xlsx "
         "não encontrado na pasta do projeto."
     )
     st.stop()
