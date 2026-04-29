@@ -1,4 +1,4 @@
-# :earth_americas: GDP dashboard template
+# :earth_americas: DEES
 
 A simple Streamlit app showing some facts about my world.
 
