@@ -171,12 +171,13 @@ st.sidebar.download_button(
 )
 
 filtered_sorted = filtered.sort_values([ano_col])
-csv_data = filtered_sorted.to_csv(index=False).encode("utf-8-sig")
+excel_buffer = BytesIO()
+filtered_sorted.to_excel(excel_buffer, index=False)
 st.sidebar.download_button(
-	label="Baixar dados filtrados (CSV)",
-	data=csv_data,
-	file_name="evolucao_docente_filtrada.csv",
-	mime="text/csv",
+	label="Baixar dados filtrados (Excel)",
+	data=excel_buffer.getvalue(),
+	file_name="evolucao_docente_filtrada.xlsx",
+	mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 )
 
 with st.expander("Visualizar dados filtrados"):

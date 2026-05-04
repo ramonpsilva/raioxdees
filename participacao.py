@@ -112,7 +112,7 @@ chart = (
     )
     .properties(
         height=600,
-        title=f"Participação do departamento do departamento {departamento_sel} por curso ao longo dos semestres",
+        title=f"Participação do departamento {departamento_sel} por curso ao longo dos semestres",
     )
     .add_params(selection)
     .interactive()
