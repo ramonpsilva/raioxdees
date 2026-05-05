@@ -170,15 +170,16 @@ st.sidebar.download_button(
 	mime="image/svg+xml",
 )
 
-filtered_sorted = filtered.sort_values([ano_col])
-excel_buffer = BytesIO()
-filtered_sorted.to_excel(excel_buffer, index=False)
-st.sidebar.download_button(
-	label="Baixar dados filtrados (Excel)",
-	data=excel_buffer.getvalue(),
-	file_name="evolucao_docente_filtrada.xlsx",
-	mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-)
+# # Por ora, comentar esta parte do código para evitar erros, pois filtered pode não conter dados válidos para exportação
+# filtered_sorted = filtered.sort_values([ano_col])
+# excel_buffer = BytesIO()
+# filtered_sorted.to_excel(excel_buffer, index=False)
+# st.sidebar.download_button(
+# 	label="Baixar dados filtrados (Excel)",
+# 	data=excel_buffer.getvalue(),
+# 	file_name="evolucao_docente_filtrada.xlsx",
+# 	mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+# )
 
-with st.expander("Visualizar dados filtrados"):
-	st.dataframe(filtered_sorted, use_container_width=True)
+# with st.expander("Visualizar dados filtrados"):
+# 	st.dataframe(filtered_sorted, use_container_width=True)

@@ -169,16 +169,16 @@ with tab1:
             - **CH TOTAL**: Carga horária total do professor selecionado
             - **CH PROPEES**: Carga horária do professor em disciplinas de pós-graduação
             """)
-
-        excel_buffer = BytesIO()
-        df_chsm.to_excel(excel_buffer, index=False)
-        file_name = professor_selected.replace(" ", "_") + ".xlsx"
-        st.download_button(
-            label="Baixar dados do professor (Excel)",
-            data=excel_buffer.getvalue(),
-            file_name=file_name,
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        )
+        # Por ora, comentar esta parte do código para evitar erros, pois df_chsm pode não estar definido se o professor selecionado não tiver dados
+        # excel_buffer = BytesIO()
+        # df_chsm.to_excel(excel_buffer, index=False)
+        # file_name = professor_selected.replace(" ", "_") + ".xlsx"
+        # st.download_button(
+        #     label="Baixar dados do professor (Excel)",
+            # data=excel_buffer.getvalue(),
+            # file_name=file_name,
+            # mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        # )
 
 with tab2:
     st.header("Análise de Ocupação das Disciplinas")
@@ -236,16 +236,16 @@ with tab2:
             
             with col4:
                 st.metric("Períodos Analisados", len(df3))
-
-            excel_buffer = BytesIO()
-            df3.to_excel(excel_buffer, index=False)
-            file_name = disciplina_selected.replace(" ", "_") + ".xlsx"
-            st.download_button(
-                label="Baixar dados da disciplina (Excel)",
-                data=excel_buffer.getvalue(),
-                file_name=file_name,
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            )
+            # Por ora, comentar esta parte do código para evitar erros, pois df3 pode não estar definido se a disciplina selecionada não tiver dados
+            # excel_buffer = BytesIO()
+            # df3.to_excel(excel_buffer, index=False)
+            # file_name = disciplina_selected.replace(" ", "_") + ".xlsx"
+            # st.download_button(
+            #     label="Baixar dados da disciplina (Excel)",
+            #     data=excel_buffer.getvalue(),
+            #     file_name=file_name,
+            #     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            # )
 
 # Sidebar com informações gerais
 with st.sidebar:
