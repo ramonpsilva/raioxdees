@@ -6,13 +6,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
+from security import SecurityManager
 
 st.title("Evolução Docente por Departamento da EE")
 
-
 @st.cache_data
 def load_data(file_path: str) -> pd.DataFrame:
-    return pd.read_excel(file_path)
+    decrypted = SecurityManager().decrypt_file(file_path)
+    return pd.read_excel(BytesIO(decrypted))
 
 
 def build_svg_plot(data: pd.DataFrame, departments: list[str], year_ticks: list[int]) -> bytes:
@@ -40,10 +41,10 @@ def build_svg_plot(data: pd.DataFrame, departments: list[str], year_ticks: list[
 	return svg_buffer.getvalue()
 
 # DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-data_file = Path(__file__).parent/"data/evolucao_docente.xlsx"
+data_file = Path(__file__).parent/"data/evolucao_docente.xlsx.encrypted"
 
 if not data_file.exists():
-	st.error("Arquivo evolucao_docente.xlsx não encontrado na pasta do projeto.")
+	st.error("Arquivo evolucao_docente.xlsx.encrypted não encontrado na pasta do projeto.")
 	st.stop()
 
 df = load_data(str(data_file))

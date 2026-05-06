@@ -7,7 +7,8 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import glob
+
+from security import SecurityManager
 
 # Cache para carregar dados apenas uma vez
 @st.cache_data
@@ -16,8 +17,9 @@ def load_data():
     # passo 1 - importar dados
     # encargos = pd.read_excel('data/cursosConsolidados_20122_20251.xlsx')
     # encargos = pd.read_csv('data/cursosConsolidados_20122_20251.csv', sep=';', encoding='cp1252')
-    data_file = Path(__file__).parent/"data"/"cursosConsolidados_20122_20251.csv"
-    encargos = pd.read_csv(data_file, sep=';', encoding='cp1252')
+    data_file = Path(__file__).parent/"data"/"cursosConsolidados_20122_20251.csv.encrypted"
+    decrypted = SecurityManager().decrypt_file(str(data_file))
+    encargos = pd.read_csv(BytesIO(decrypted), sep=';', encoding='cp1252')
     
     # inicio das "estatísticas"
     semestres = sorted(encargos['semestre'].dropna().unique().tolist())
@@ -121,7 +123,7 @@ try:
     df = calculate_general_stats(encargos, semestres)
     df2 = calculate_occupation_stats(encargos, semestres)
 except FileNotFoundError:
-    st.error("❌ Arquivo 'data/cursosConsolidados_20122_20251.csv' não encontrado!")
+    st.error("❌ Arquivo 'data/cursosConsolidados_20122_20251.csv.encrypted' não encontrado!")
     st.stop()
 except Exception as e:
     st.error(f"❌ Erro ao carregar dados: {str(e)}")

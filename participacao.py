@@ -1,8 +1,11 @@
+import io
 from pathlib import Path
 
 import altair as alt
 import pandas as pd
 import streamlit as st
+
+from security import SecurityManager
 
 
 st.title("Participação de departamento por curso de graduação")
@@ -10,15 +13,16 @@ st.title("Participação de departamento por curso de graduação")
 
 @st.cache_data
 def load_data(file_path: str) -> pd.DataFrame:
-    df = pd.read_excel(file_path)
+    decrypted = SecurityManager().decrypt_file(file_path)
+    df = pd.read_excel(io.BytesIO(decrypted))
     df["semestre"] = df["semestre"].astype(str)
     return df
 
-data_file = Path(__file__).parent/"data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx"
+data_file = Path(__file__).parent/"data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx.encrypted"
 
 if not data_file.exists():
     st.error(
-        "Arquivo data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx "
+        "Arquivo data/percentualParticipacaoEncargosDepartamentosCurso_concatenados.xlsx.encrypted "
         "não encontrado na pasta do projeto."
     )
     st.stop()

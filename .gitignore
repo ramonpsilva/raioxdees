@@ -1,4 +1,6 @@
 .streamlit/secrets.toml
+data/*.xlsx
+data/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
