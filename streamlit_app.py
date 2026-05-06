@@ -2,7 +2,7 @@ import streamlit as st
 XRAY_DEES_KEY = st.secrets["XRAY_DEES_KEY"]
 
 st.set_page_config(
-    page_title="Dashboard DEES"
+    page_title="Dashboard DEES",
     layout="wide",
     page_icon="📊"
 )
