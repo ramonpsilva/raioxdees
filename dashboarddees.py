@@ -15,11 +15,10 @@ from security import SecurityManager
 def load_data():
     """Carrega e processa os dados"""
     # passo 1 - importar dados
-    # encargos = pd.read_excel('data/cursosConsolidados_20122_20251.xlsx')
-    # encargos = pd.read_csv('data/cursosConsolidados_20122_20251.csv', sep=';', encoding='cp1252')
-    data_file = Path(__file__).parent/"data"/"cursosConsolidados_20122_20251.csv.encrypted"
+    data_file = Path(__file__).parent/"data"/"cursosConsolidados_20122_20261.xlsx.encrypted"
     decrypted = SecurityManager().decrypt_file(str(data_file))
-    encargos = pd.read_csv(BytesIO(decrypted), sep=';', encoding='cp1252')
+    encargos = pd.read_excel(BytesIO(decrypted))
+    # encargos = pd.read_csv(BytesIO(decrypted), sep=';', encoding='cp1252')
     
     # inicio das "estatísticas"
     semestres = sorted(encargos['semestre'].dropna().unique().tolist())
@@ -49,7 +48,7 @@ def calculate_general_stats(encargos, semestres):
         numvol = cdsm.loc[cdsm['vinculo'] == 'VOL', 'professor'].nunique()
         numvis = cdsm.loc[cdsm['vinculo'] == 'VIS', 'professor'].nunique()
         
-        cdsmdees = somacht / 15 / (numprf + numsub) if (numprf + numsub) > 0 else 0
+        cdsmdees = somacht / 15 / (numprf + numsub + numvol + numvis) if (numprf + numsub + numvol + numvis) > 0 else 0
         somachp = cdsm.loc[cdsm['curso'] == 'PROPEES', 'ch_prof'].sum()
         somachg = somacht - somachp
         chg = somachg / somacht if somacht > 0 else 0
@@ -123,7 +122,7 @@ try:
     df = calculate_general_stats(encargos, semestres)
     df2 = calculate_occupation_stats(encargos, semestres)
 except FileNotFoundError:
-    st.error("❌ Arquivo 'data/cursosConsolidados_20122_20251.csv.encrypted' não encontrado!")
+    st.error("❌ Arquivo 'data/cursosConsolidados_20122_20261.xlsx.encrypted' não encontrado!")
     st.stop()
 except Exception as e:
     st.error(f"❌ Erro ao carregar dados: {str(e)}")
@@ -132,55 +131,56 @@ except Exception as e:
 # Tabs principais
 tab1, tab2 = st.tabs(["📈 CHSM", "📊 Ocupação"])
 
+
 with tab1:
-    st.header("Histórico da CHSM")
+    st.header("Histórico da CHSM (em construção)")
     
-    # Filtro de vínculo e seletor de professor lado a lado
-    vinculos_disponiveis = sorted(encargos['vinculo'].dropna().unique().tolist())
-    col_vinculo, col_professor = st.columns(2)
+#     # Filtro de vínculo e seletor de professor lado a lado
+#     vinculos_disponiveis = sorted(encargos['vinculo'].dropna().unique().tolist())
+#     col_vinculo, col_professor = st.columns(2)
 
-    with col_vinculo:
-        vinculos_selected = st.multiselect(
-            "Filtrar por vínculo:",
-            vinculos_disponiveis,
-            default=["PRF"] if "PRF" in vinculos_disponiveis else vinculos_disponiveis,
-            key="vinculo_filter"
-        )
+#     with col_vinculo:
+#         vinculos_selected = st.multiselect(
+#             "Filtrar por vínculo:",
+#             vinculos_disponiveis,
+#             default=["PRF"] if "PRF" in vinculos_disponiveis else vinculos_disponiveis,
+#             key="vinculo_filter"
+#         )
 
-    professores_filtrados = sorted(
-        encargos.loc[encargos['vinculo'].isin(vinculos_selected), 'professor'].dropna().unique().tolist()
-    ) if vinculos_selected else professores
+#     professores_filtrados = sorted(
+#         encargos.loc[encargos['vinculo'].isin(vinculos_selected), 'professor'].dropna().unique().tolist()
+#     ) if vinculos_selected else professores
 
-    with col_professor:
-        professor_selected = st.selectbox(
-            "Selecione um professor:",
-            professores_filtrados,
-            index=0,
-            key="professor_selector"
-        )
+#     with col_professor:
+#         professor_selected = st.selectbox(
+#             "Selecione um professor:",
+#             professores_filtrados,
+#             index=0,
+#             key="professor_selector"
+#         )
     
-    # Gráfico CHSM
-    if professor_selected:
-        fig_chsm, df_chsm = create_chsm_graph(encargos, df, semestres, professor_selected)
-        st.plotly_chart(fig_chsm, use_container_width=True)
+#     # Gráfico CHSM
+#     if professor_selected:
+#         fig_chsm, df_chsm = create_chsm_graph(encargos, df, semestres, professor_selected)
+#         st.plotly_chart(fig_chsm, use_container_width=True)
         
-        # Informações adicionais
-        with st.expander("ℹ️ Informações sobre CHSM"):
-            st.write("""
-            - **CH DEES**: Carga horária total do departamento
-            - **CH TOTAL**: Carga horária total do professor selecionado
-            - **CH PROPEES**: Carga horária do professor em disciplinas de pós-graduação
-            """)
-        # Por ora, comentar esta parte do código para evitar erros, pois df_chsm pode não estar definido se o professor selecionado não tiver dados
-        # excel_buffer = BytesIO()
-        # df_chsm.to_excel(excel_buffer, index=False)
-        # file_name = professor_selected.replace(" ", "_") + ".xlsx"
-        # st.download_button(
-        #     label="Baixar dados do professor (Excel)",
-            # data=excel_buffer.getvalue(),
-            # file_name=file_name,
-            # mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        # )
+#         # Informações adicionais
+#         with st.expander("ℹ️ Informações sobre CHSM"):
+#             st.write("""
+#             - **CH DEES**: Carga horária total do departamento
+#             - **CH TOTAL**: Carga horária total do professor selecionado
+#             - **CH PROPEES**: Carga horária do professor em disciplinas de pós-graduação
+#             """)
+#         # Por ora, comentar esta parte do código para evitar erros, pois df_chsm pode não estar definido se o professor selecionado não tiver dados
+#         # excel_buffer = BytesIO()
+#         # df_chsm.to_excel(excel_buffer, index=False)
+#         # file_name = professor_selected.replace(" ", "_") + ".xlsx"
+#         # st.download_button(
+#         #     label="Baixar dados do professor (Excel)",
+#             # data=excel_buffer.getvalue(),
+#             # file_name=file_name,
+#             # mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+#         # )
 
 with tab2:
     st.header("Análise de Ocupação das Disciplinas")
@@ -270,5 +270,5 @@ with st.sidebar:
         - Distribuição de encargos docentes
         
         Os dados são baseados na oferta de disciplinas 
-        do DEES entre 2012/2 e 2025/1.
+        do DEES entre 2012/2 e 2026/1.
         """)

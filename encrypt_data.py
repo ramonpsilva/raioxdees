@@ -24,5 +24,5 @@ if __name__ == "__main__":
     data_dir = 'data'
     for filename in os.listdir(data_dir):
         filepath = os.path.join(data_dir, filename)
-        if os.path.isfile(filepath):
+        if os.path.isfile(filepath) and os.path.splitext(filename)[1].lower() in ('.xlsx', '.csv'):
             encrypt_file(filepath)
